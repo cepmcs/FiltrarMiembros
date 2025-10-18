@@ -4,22 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filtrar CSV</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Filtrar Usuarios por Nivel (ola mica) </h1>
-    <form id="csvForm">
-        <label for="csvFile">Subir archivo CSV:</label>
-        <input type="file" id="csvFile" accept=".csv" required><br><br>
+    <main class="card">
+        <img src="favicon.png" alt="" class="card-illustration" aria-hidden="true">
+        <h1>Filtrar Usuarios por Nivel</h1>
+        <p class="subtitle">Subí el CSV de miembros, elegí un nivel.</p>
 
-        <label for="levelSelect">Seleccionar nivel:</label>
-        <select id="levelSelect" required>
-            <option value="" disabled selected>Selecciona un nivel</option>
-        </select><br><br>
+        <form id="csvForm">
+            <div class="form-group">
+                <label for="csvFile">Subir archivo CSV</label>
+                <input type="file" id="csvFile" accept=".csv" required>
+            </div>
 
-        <button type="submit">Generar TXT</button>
-    </form>
+            <div class="form-group">
+                <label for="levelSelect">Seleccionar nivel</label>
+                <select id="levelSelect" required>
+                    <option value="" disabled selected>Selecciona un nivel</option>
+                </select>
+            </div>
 
-    <a id="downloadLink" style="display: none;">Descargar archivo</a>
+            <button type="submit">Generar TXT</button>
+        </form>
+
+        <a id="downloadLink" class="download-link">⬇️ Haz clic aquí para descargar el archivo</a>
+    </main>
 
     <script src="script.js"></script>
 </body>

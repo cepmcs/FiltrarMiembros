@@ -1,9 +1,16 @@
+// Maneja la generación del TXT cuando se envía el formulario.
 document.getElementById('csvForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const fileInput = document.getElementById('csvFile');
     const levelSelect = document.getElementById('levelSelect');
     const selectedLevel = levelSelect.value;
+    const downloadLink = document.getElementById('downloadLink');
+
+    // Limpia el enlace previo antes de procesar un nuevo archivo.
+    downloadLink.classList.remove('visible');
+    downloadLink.removeAttribute('href');
+    downloadLink.removeAttribute('download');
 
     if (!fileInput.files.length || !selectedLevel) {
         alert('Por favor, sube un archivo y selecciona un nivel.');
@@ -25,6 +32,7 @@ document.getElementById('csvForm').addEventListener('submit', function (e) {
             return;
         }
 
+        // Filtra miembros según el nivel seleccionado.
         const filteredMembers = rows
             .slice(1) // Exclude headers
             .filter(row => row[levelIndex]?.trim() === selectedLevel)
@@ -39,19 +47,26 @@ document.getElementById('csvForm').addEventListener('submit', function (e) {
         const blob = new Blob([txtContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 
-        const downloadLink = document.getElementById('downloadLink');
+        // Configura el enlace de descarga con el contenido generado.
         downloadLink.href = url;
         downloadLink.download = `${selectedLevel}_usuarios.txt`;
-        downloadLink.style.display = 'inline';
-        downloadLink.textContent = 'Haz clic aquí para descargar el archivo';
+        downloadLink.textContent = `⬇️ Descargar ${filteredMembers.length} miembros de ${selectedLevel}`;
+        downloadLink.classList.add('visible');
     };
 
     reader.readAsText(file);
 });
 
+// Se activa al seleccionar un CSV para poblar el desplegable de niveles.
 document.getElementById('csvFile').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const reader = new FileReader();
+    const downloadLink = document.getElementById('downloadLink');
+
+    // Oculta el enlace si se elige un nuevo archivo.
+    downloadLink.classList.remove('visible');
+    downloadLink.removeAttribute('href');
+    downloadLink.removeAttribute('download');
 
     reader.onload = function (event) {
         const csvData = event.target.result;
@@ -64,6 +79,7 @@ document.getElementById('csvFile').addEventListener('change', function (event) {
             return;
         }
 
+        // Extrae niveles únicos y actualiza el <select>.
         const levels = Array.from(
             new Set(rows.slice(1).map(row => row[levelIndex]?.trim()).filter(Boolean))
         );
